@@ -1,0 +1,2972 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Soru Çözümü</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --secondary: #0ea5e9;
+      --success: #10b981;
+      --success-hover: #059669;
+      --success-light: #ecfdf5;
+      --whatsapp: #25d366;
+      --whatsapp-hover: #20ba5a;
+      --background: #f8fafc;
+      --surface: #ffffff;
+      --surface-border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      
+      /* Subject Badge Colors */
+      --tag-mat: #4f46e5;
+      --tag-mat-bg: #e0e7ff;
+      --tag-fiz: #d97706;
+      --tag-fiz-bg: #fef3c7;
+      --tag-kim: #9333ea;
+      --tag-kim-bg: #f3e8ff;
+      --tag-biyo: #059669;
+      --tag-biyo-bg: #d1fae5;
+      --tag-turk: #e11d48;
+      --tag-turk-bg: #ffe4e6;
+      --tag-cog: #0d9488;
+      --tag-cog-bg: #ccfbf1;
+      --tag-geo: #0891b2;
+      --tag-geo-bg: #cffafe;
+      --tag-tar: #c2410c;
+      --tag-tar-bg: #ffedd5;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.03);
+      --shadow-glow: 0 10px 25px -5px rgba(37, 211, 102, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--background);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Top Quick Switcher / Emulator Toolbar (Hidden on ?rol=ogrenci) */
+    .role-switcher-bar {
+      background: #0f172a;
+      color: #94a3b8;
+      padding: 8px 16px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1e293b;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .role-switcher-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      color: #f8fafc;
+    }
+
+    .role-switcher-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .role-switcher-pills {
+      display: flex;
+      gap: 6px;
+      background: #1e293b;
+      padding: 3px;
+      border-radius: var(--radius-full);
+    }
+
+    .role-pill {
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .role-pill.active {
+      background: #3b82f6;
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .dev-top-menu-btn {
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: #f1f5f9;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px 4px 6px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dev-top-menu-btn:hover {
+      background: #334155;
+      border-color: #475569;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .dev-top-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .app-container {
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 16px;
+      flex: 1;
+    }
+
+    /* ==============================================================
+       HEADER COMPONENT
+       ============================================================== */
+    .app-header {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--surface-border);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .app-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 26px;
+      box-shadow: 0 8px 16px -4px rgba(79, 70, 229, 0.4);
+      flex-shrink: 0;
+    }
+
+    .brand-info h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .brand-info p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .live-sync-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    /* WHATSAPP SHARE BUTTON */
+    .btn-whatsapp-share {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+      color: #ffffff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow-glow);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+      text-decoration: none;
+    }
+
+    @media (min-width: 640px) {
+      .btn-whatsapp-share {
+        width: auto;
+      }
+    }
+
+    .btn-whatsapp-share:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -4px rgba(37, 211, 102, 0.5);
+    }
+
+    .btn-whatsapp-share:active {
+      transform: translateY(0);
+    }
+
+    .btn-whatsapp-share svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* Public URL Info Bar */
+    .public-url-bar {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .public-url-text {
+      color: #1e40af;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .public-url-link {
+      color: #2563eb;
+      text-decoration: underline;
+      font-weight: 700;
+      word-break: break-all;
+    }
+
+    .btn-copy-url {
+      background: #ffffff;
+      border: 1px solid #93c5fd;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .btn-copy-url:hover {
+      background: #dbeafe;
+    }
+
+    /* Stats Overview Row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-number {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .stat-number.waiting { color: #f59e0b; }
+    .stat-number.completed { color: var(--success); }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    /* Filter Bar - Includes "TÜMÜ" + 8 Subjects */
+    .filter-section {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .filter-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .filter-header-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-toggle-solved {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      background: var(--primary-light);
+      border: none;
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+    }
+
+    .filter-scroll-container {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+
+    .filter-scroll-container::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .filter-scroll-container::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .filter-btn {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      border: 1px solid transparent;
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-btn:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+    }
+
+    .filter-count {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.25);
+      font-weight: 800;
+    }
+
+    .filter-btn:not(.active) .filter-count {
+      background: #cbd5e1;
+      color: #1e293b;
+    }
+
+    /* Search Bar Component */
+    .search-section {
+      margin-bottom: 14px;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: var(--surface);
+      border: 1.5px solid var(--surface-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+
+    .search-input-wrapper:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+      background: #ffffff;
+    }
+
+    .search-icon {
+      padding-left: 14px;
+      font-size: 16px;
+      color: var(--text-muted);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      color: var(--text-main);
+      outline: none;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .search-clear-btn {
+      background: #f1f5f9;
+      border: none;
+      color: var(--text-muted);
+      width: 26px;
+      height: 26px;
+      border-radius: var(--radius-full);
+      margin-right: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .search-clear-btn:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    /* Helper hint banner in list header */
+    .filter-hint {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Student List & Cards */
+    .queue-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding: 0 4px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .queue-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .queue-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .student-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+      position: relative;
+    }
+
+    .student-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .student-card.all-solved-card {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+      opacity: 0.78;
+    }
+
+    .student-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .queue-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-full);
+      background: #e0e7ff;
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .queue-badge.done {
+      background: #ecfdf5;
+      color: var(--success);
+    }
+
+    .student-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .student-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .student-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .student-time {
+      font-size: 12px;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .subject-tags {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    /* CLICKABLE SUBJECT TAGS */
+    .subject-tag {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: var(--radius-full);
+      letter-spacing: 0.01em;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid transparent;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .subject-tag:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+      filter: brightness(0.95);
+    }
+
+    .subject-tag:active {
+      transform: scale(0.96);
+    }
+
+    .subject-tag.current-target {
+      box-shadow: 0 0 0 2px var(--primary);
+      font-weight: 800;
+    }
+
+    .subject-tag.solved-tag {
+      background: #ecfdf5 !important;
+      color: #059669 !important;
+      border-color: #a7f3d0 !important;
+      text-decoration: line-through !important;
+      opacity: 0.90;
+    }
+
+    .subject-tag-status-indicator {
+      font-size: 11px;
+      font-weight: 700;
+      margin-left: 3px;
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    .subject-tag.solved-tag .subject-tag-status-indicator {
+      color: #047857;
+      font-weight: 800;
+    }
+
+    .tag-matematik { color: var(--tag-mat); background: var(--tag-mat-bg); }
+    .tag-fizik { color: var(--tag-fiz); background: var(--tag-fiz-bg); }
+    .tag-kimya { color: var(--tag-kim); background: var(--tag-kim-bg); }
+    .tag-biyoloji { color: var(--tag-biyo); background: var(--tag-biyo-bg); }
+    .tag-turkce { color: var(--tag-turk); background: var(--tag-turk-bg); }
+    .tag-cografya { color: var(--tag-cog); background: var(--tag-cog-bg); }
+    .tag-geometri { color: var(--tag-geo); background: var(--tag-geo-bg); }
+    .tag-tarih { color: var(--tag-tar); background: var(--tag-tar-bg); }
+
+    /* ACTION BUTTONS ON CARD */
+    .student-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .btn-solve-subject {
+      background: var(--success);
+      color: #ffffff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+      white-space: nowrap;
+    }
+
+    .btn-solve-subject:hover {
+      background: var(--success-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-undo {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      border: 1px solid var(--surface-border);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-undo:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    .all-done-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #ecfdf5;
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      border: 1px solid #a7f3d0;
+    }
+
+    /* Empty State */
+    .empty-state {
+      background: var(--surface);
+      border: 2px dashed var(--surface-border);
+      border-radius: var(--radius-lg);
+      padding: 48px 20px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .empty-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .empty-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* ==============================================================
+       STUDENT APPLICATION FORM (ROL = OGRENCI)
+       ============================================================== */
+    .student-portal-wrapper {
+      max-width: 580px;
+      margin: 20px auto;
+      width: 100%;
+    }
+
+    .student-form-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .form-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e0e7ff;
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .student-form-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .student-form-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--surface-border);
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text-main);
+      background: #f8fafc;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+    }
+
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    @media (min-width: 520px) {
+      .subject-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .subject-checkbox-item {
+      position: relative;
+    }
+
+    .subject-checkbox-input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .subject-checkbox-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 14px 8px;
+      border: 2px solid var(--surface-border);
+      border-radius: var(--radius-md);
+      background: #f8fafc;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+      text-align: center;
+    }
+
+    .subject-checkbox-label .icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .subject-checkbox-label .text {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .subject-checkbox-input:checked + .subject-checkbox-label {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+    }
+
+    .subject-checkbox-label::after {
+      content: '✓';
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary);
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.2s ease;
+    }
+
+    .subject-checkbox-input:checked + .subject-checkbox-label::after {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .btn-submit-student {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+      color: #ffffff;
+      border: none;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.4);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-submit-student:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -4px rgba(79, 70, 229, 0.5);
+    }
+
+    .btn-submit-student:active {
+      transform: translateY(0);
+    }
+
+    /* Student Submission Success View (STRICTLY ONE ATTEMPT - NO RESET BUTTON) */
+    .success-card {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-lg);
+      padding: 36px 24px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .success-icon-badge {
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-full);
+      background: #ecfdf5;
+      color: var(--success);
+      font-size: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px auto;
+      border: 4px solid #d1fae5;
+    }
+
+    .success-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .success-message {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .queue-position-box {
+      background: #f8fafc;
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .queue-position-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .queue-position-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .single-attempt-locked-banner {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      font-size: 13px;
+      color: #1e40af;
+      font-weight: 600;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: var(--radius-full);
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .toast-container.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-10px);
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      border: none;
+      background: transparent;
+      font-size: 22px;
+      color: var(--text-muted);
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-full);
+      transition: background 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    /* Subject Action Modal Specific */
+    .sub-action-box {
+      text-align: center;
+      padding: 10px 4px;
+    }
+
+    .sub-action-icon {
+      font-size: 48px;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .sub-action-student {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .sub-action-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .sub-action-subject-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 15px;
+      font-weight: 800;
+      padding: 6px 16px;
+      border-radius: var(--radius-full);
+      margin-bottom: 18px;
+    }
+
+    .sub-action-status-card {
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .sub-action-status-card.pending {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .sub-action-status-card.solved {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    .btn-solve-modal-primary {
+      width: 100%;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      border: none;
+      padding: 15px;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-solve-modal-primary:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.45);
+    }
+
+    .btn-unsolve-modal-secondary {
+      width: 100%;
+      background: #f1f5f9;
+      color: var(--text-main);
+      border: 1px solid var(--surface-border);
+      padding: 14px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-unsolve-modal-secondary:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    /* Developer Modal Specific */
+    .dev-modal-content {
+      text-align: center;
+      padding: 12px 4px;
+    }
+
+    .dev-modal-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+      color: #ffffff;
+      font-size: 26px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px auto;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
+    }
+
+    .dev-modal-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .dev-modal-role {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .dev-modal-bio {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .dev-contact-box {
+      background: #f8fafc;
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .dev-contact-email {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .btn-dev-email {
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .btn-dev-copy {
+      background: #334155;
+      color: #f1f5f9;
+      border: 1px solid #475569;
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .btn-dev-phone {
+      background: #10b981;
+      color: #ffffff;
+      border: none;
+      padding: 6px 14px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-dev-phone:hover {
+      background: #059669;
+    }
+
+    .btn-dev-call {
+      background: #10b981;
+      color: #ffffff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-dev-call:hover {
+      background: #059669;
+    }
+
+    .btn-return-teacher {
+      background: #eef2ff;
+      color: #4338ca;
+      border: 1px solid #c7d2fe;
+      padding: 11px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-return-teacher:hover {
+      background: #e0e7ff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Role Switcher / Emulator Toolbar (Hidden completely for students ?rol=ogrenci) -->
+  <div class="role-switcher-bar">
+    <div class="role-switcher-title">
+      <span>📚 Soru Çözümü</span>
+    </div>
+    <div class="role-switcher-right">
+      <div class="role-switcher-pills">
+        <button class="role-pill" id="pillTeacher" onclick="switchRole('ogretmen')">
+          👨‍🏫 Öğretmen Paneli
+        </button>
+        <button class="role-pill" id="pillStudent" onclick="switchRole('ogrenci_ekle')">
+          ➕ Öğrenci Ekle
+        </button>
+      </div>
+      <button class="dev-top-menu-btn" onclick="openDevModal()" title="Geliştirici İletişim & Hakkında">
+        <span class="dev-top-avatar">MEA</span>
+        <span>Geliştirici</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="app-container">
+
+    <!-- ==============================================================
+         TEACHER VIEW (ÖĞRETMEN YÖNETİM PANELİ)
+         ============================================================== -->
+    <div id="teacherView" style="display: none;">
+      <!-- Header with Brand & WhatsApp Share Button -->
+      <div class="app-header">
+        <div class="header-brand">
+          <div class="brand-icon-box">
+            <span>📐</span>
+          </div>
+          <div class="brand-info">
+            <h1>Soru Çözümü</h1>
+            <p>
+              <span>Öğretmen Masası</span>
+              <span>•</span>
+              <span id="activeSessionBadge" style="font-weight: 700; color: #4338ca; background: #eef2ff; padding: 2px 8px; border-radius: 6px; font-size: 11px;">Haftalık Oturum: Aktif</span>
+              <span>•</span>
+              <span class="live-sync-indicator">
+                <span class="pulse-dot"></span> Canlı Bulut Senkronizasyonu Aktif
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <!-- WHATSAPP PAYLAŞ BUTONU -->
+        <button class="btn-whatsapp-share" id="btnShareForm" onclick="shareStudentForm()">
+          <svg viewBox="0 0 24 24">
+            <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 1.67c4.55 0 8.24 3.69 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.188 8.188 0 0 1-5.82 2.41h-.01c-1.42 0-2.82-.37-4.06-1.07l-.29-.17-3.12.82.83-3.04-.19-.3a8.196 8.196 0 0 1-1.26-4.49c0-4.55 3.69-8.24 8.24-8.24zm4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.98-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.25-1.5-1.4-1.75-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.15.17-.25.25-.42.08-.17.04-.32-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.78 2.71 4.31 3.8.6.26 1.07.41 1.44.53.61.19 1.16.17 1.6.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.17-.48-.29z"/>
+          </svg>
+          <span>Öğrenci Formunu Paylaş</span>
+        </button>
+      </div>
+
+
+      <!-- Quick Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-number waiting" id="statWaiting">0</div>
+          <div class="stat-label">Bekleyen Öğrenci</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number completed" id="statCompleted">0</div>
+          <div class="stat-label">Çözdüren Öğrenci</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="statTotal">0</div>
+          <div class="stat-label">Toplam Öğrenci</div>
+        </div>
+      </div>
+
+      <!-- Fast Subject Tabs - INCLUDES "TÜMÜ" + 8 SUBJECTS -->
+      <div class="filter-section">
+        <div class="filter-header">
+          <div class="filter-header-title">
+            <span>DERS VE LİSTE FİLTRESİ:</span>
+          </div>
+          <button class="filter-toggle-solved" id="btnToggleSolved" onclick="toggleShowSolved()">
+            <span id="toggleSolvedIcon">👁️</span>
+            <span id="toggleSolvedText">Çözülenleri Göster</span>
+          </button>
+        </div>
+        <div class="filter-scroll-container" id="filterContainer">
+          <!-- Injected dynamically: [Tümü] + [Matematik, Fizik, Kimya, Biyoloji, Türkçe, Coğrafya, Geometri, Tarih] -->
+        </div>
+      </div>
+
+      <!-- Search Bar (Tümü ve Ders Menüsünün Hemen Altında) -->
+      <div class="search-section">
+        <div class="search-input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="studentSearchInput" 
+            class="search-input" 
+            placeholder="Öğrenci adı ile ara (Örn: Ahmet, Zeynep)..." 
+            oninput="handleSearch(this.value)"
+            autocomplete="off"
+          >
+          <button 
+            type="button" 
+            id="btnClearSearch" 
+            class="search-clear-btn" 
+            onclick="clearSearch()" 
+            style="display: none;" 
+            title="Aramayı Temizle"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- User Tip -->
+      <div class="filter-hint">
+        <span>💡</span>
+        <span><strong>İpucu:</strong> Öğrenci kartındaki herhangi bir ders etiketine tıklayarak o dersi tek tıkla <strong>"Çözüldü Olarak İşaretle"</strong> menüsünden yönetebilirsiniz.</span>
+      </div>
+
+      <!-- Students Queue List for the Selected Subject / Tümü -->
+      <div class="queue-header">
+        <div class="queue-title" id="queueListTitle">
+          <span id="subjectIconHolder">📋</span>
+          <span id="subjectTitleHolder">Tüm Başvurular</span>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="filter-btn" style="padding: 6px 12px;" onclick="syncWithCloud(true)">
+            🔄 Yenile
+          </button>
+          <button class="filter-btn" style="padding: 6px 12px; color: #dc2626;" onclick="resetQueueConfirm()">
+            🗑️ Sıfırla
+          </button>
+        </div>
+      </div>
+
+      <div class="queue-list" id="queueList">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- ==============================================================
+         STUDENT VIEW (ÖĞRENCİ BAŞVURU FORMU - ?rol=ogrenci)
+         ============================================================== -->
+    <div id="studentView" style="display: none;">
+      <div class="student-portal-wrapper">
+        
+        <!-- Application Form (Used for both Student Link & Teacher Manual Student Add) -->
+        <div class="student-form-card" id="studentFormBox">
+          <div class="form-header-badge" id="formHeaderBadge">
+            <span>✨ Öğrenci Başvuru Formu</span>
+          </div>
+          <h2 class="student-form-title" id="formTitle">Soru Çözümü Sırası Al</h2>
+          <p class="student-form-subtitle" id="formSubtitle">Lütfen adınızı ve çözdürmek istediğiniz dersleri seçerek sıraya girin. (Her öğrencinin 1 kez başvuru hakkı vardır)</p>
+
+          <form id="studentApplicationForm" onsubmit="handleStudentSubmit(event)">
+            <div class="form-group">
+              <label class="form-label" for="studentNameInput">Ad Soyad</label>
+              <input 
+                type="text" 
+                id="studentNameInput" 
+                class="form-input" 
+                placeholder="" 
+                required 
+                autocomplete="name"
+              >
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Soru Çözülecek Dersler (Birden fazla seçebilirsiniz)</label>
+              <div class="subject-grid">
+                <!-- 1. Matematik -->
+                <div class="subject-checkbox-item">
+                  <input type="checkbox" id="sub_mat" name="ders" value="Matematik" class="subject-checkbox-input">
+                  <label for="sub_mat" class="subject-checkbox-label">
+                    <span class="icon">📐</span>
+                    <span class="text">Matematik</span>
+                  </label>
+                </div>
+
+                <!-- 2. Fizik -->
+                <div class="subject-checkbox-item">
+                  <input type="checkbox" id="sub_fiz" name="ders" value="Fizik" class="subject-checkbox-input">
+                  <label for="sub_fiz" class="subject-checkbox-label">
+                    <span class="icon">⚡</span>
+                    <span class="text">Fizik</span>
+                  </label>
+                </div>
+
+                <!-- 3. Kimya -->
+                <div class="subject-checkbox-item">
+                  <input type="checkbox" id="sub_kim" name="ders" value="Kimya" class="subject-checkbox-input">
+                  <label for="sub_kim" class="subject-checkbox-label">
+                    <span class="icon">🧪</span>
+                    <span class="text">Kimya</span>
+                  </label>
+                </div>
+
+                <!-- 4. Biyoloji -->
+                <div class="subject-checkbox-item">
+                  <input type="checkbox" id="sub_biyo" name="ders" value="Biyoloji" class="subject-checkbox-input">
+                  <label for="sub_biyo" class="subject-checkbox-label">
+                    <span class="icon">🧬</span>
+                    <span class="text">Biyoloji</span>
+                  </label>
+                </div>
+
+                <!-- 5. Türkçe -->
+                <div class="subject-checkbox-item">
+                  <input type="checkbox" id="sub_turk" name="ders" value="Türkçe" class="subject-checkbox-input">
+                  <label for="sub_turk" class="subject-checkbox-label">
+                    <span class="icon">📖</span>
+                    <span class="text">Türkçe</span>
+                  </label>
+                </div>
+
+                <!-- 6. Coğrafya -->
+                <div class="subject-checkbox-item">
+                  <input type="checkbox" id="sub_cog" name="ders" value="Coğrafya" class="subject-checkbox-input">
+                  <label for="sub_cog" class="subject-checkbox-label">
+                    <span class="icon">🌍</span>
+                    <span class="text">Coğrafya</span>
+                  </label>
+                </div>
+
+                <!-- 7. Geometri -->
+                <div class="subject-checkbox-item">
+                  <input type="checkbox" id="sub_geo" name="ders" value="Geometri" class="subject-checkbox-input">
+                  <label for="sub_geo" class="subject-checkbox-label">
+                    <span class="icon">📏</span>
+                    <span class="text">Geometri</span>
+                  </label>
+                </div>
+
+                <!-- 8. Tarih -->
+                <div class="subject-checkbox-item">
+                  <input type="checkbox" id="sub_tar" name="ders" value="Tarih" class="subject-checkbox-input">
+                  <label for="sub_tar" class="subject-checkbox-label">
+                    <span class="icon">🏛️</span>
+                    <span class="text">Tarih</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-submit-student" id="btnSubmit">
+              <span>🚀 Kaydet ve Sıraya Gir</span>
+            </button>
+            <button type="button" class="btn-return-teacher" id="btnReturnTeacher" style="display: none;" onclick="switchRole('ogretmen')">
+              ← Öğretmen Paneline Dön
+            </button>
+          </form>
+        </div>
+
+        <!-- Submission Success State (STRICTLY ONE ATTEMPT - NO RESET BUTTON) -->
+        <div class="success-card" id="studentSuccessBox">
+          <div class="success-icon-badge">✓</div>
+          <h2 class="success-title">Sıraya Başarıyla Kaydoldunuz!</h2>
+          <p class="success-message">
+            Talebiniz öğretmenin ekranına canlı olarak iletildi. Öğretmeniniz ders sıranız geldiğinde sorularınızı çözecektir.
+          </p>
+
+          <div class="queue-position-box">
+            <span class="queue-position-label">Kayıtlı İsminiz & Dersleriniz</span>
+            <span class="queue-position-num" id="userSuccessName">Öğrenci</span>
+            <span style="font-size: 14px; font-weight: 600; color: var(--primary); margin-top: 4px;" id="userQueueSubjects">Matematik</span>
+          </div>
+
+          <div class="single-attempt-locked-banner">
+            <span>🔒</span>
+            <span>Başvurunuz sisteme kaydedilmiştir. Her öğrencinin tek bir başvuru hakkı bulunmaktadır.</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Subject Action Modal (When clicking ANY subject badge on student card) -->
+  <div class="modal-overlay" id="subjectActionModal" onclick="closeSubjectModalOnBackdrop(event)">
+    <div class="modal-card" style="max-width: 440px;">
+      <button class="modal-close-btn" onclick="closeSubjectModal()">&times;</button>
+      <div class="sub-action-box" id="subjectModalContent">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Session Choice Modal (Teacher) -->
+  <div class="modal-overlay" id="shareChoiceModal" onclick="closeShareChoiceModalOnBackdrop(event)">
+    <div class="modal-card" style="max-width: 480px;">
+      <button class="modal-close-btn" onclick="closeShareChoiceModal()">&times;</button>
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="width: 56px; height: 56px; border-radius: var(--radius-full); background: #ecfdf5; color: var(--success); font-size: 28px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; border: 3px solid #a7f3d0;">
+          💬
+        </div>
+        <h3 style="font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">Öğrenci Formunu Paylaş</h3>
+        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+          Öğrenciler paylaşılan her link için yalnızca <strong>1 defa</strong> başvuru yapabilir.
+        </p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <!-- Option 1: New Week / Session (Recommended) -->
+        <button 
+          class="btn-submit-student" 
+          style="background: linear-gradient(135deg, #25d366 0%, #128c7e 100%); padding: 14px 16px; flex-direction: column; align-items: flex-start; text-align: left; gap: 4px; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35); cursor: pointer;" 
+          onclick="executeShareWithNewSession()"
+        >
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 800;">
+            <span>✨ Yeni Hafta Başlat & WhatsApp'ta Paylaş</span>
+          </div>
+          <div style="font-size: 12px; font-weight: 500; opacity: 0.95; line-height: 1.4;">
+            Önceki soru sırası temizlenir, yeni link oluşturulur ve tüm öğrencilere bu hafta için 1 yeni başvuru hakkı tanımlanır.
+          </div>
+        </button>
+
+        <!-- Option 2: Resend Current Session -->
+        <button 
+          class="btn-undo" 
+          style="padding: 14px 16px; display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 4px; border: 1px solid var(--surface-border); border-radius: var(--radius-md); cursor: pointer;" 
+          onclick="executeShareCurrentSession()"
+        >
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: var(--text-main);">
+            <span>📢 Mevcut Oturum Linkini Tekrar Paylaş</span>
+          </div>
+          <div style="font-size: 12px; color: var(--text-muted); line-height: 1.4;">
+            Mevcut liste korunur. Henüz formu doldurmamış öğrencilerin sıraya girmesi için aynı link tekrar gönderilir.
+          </div>
+        </button>
+      </div>
+
+      <button class="btn-undo" style="width: 100%; margin-top: 14px; padding: 10px; font-weight: 600;" onclick="closeShareChoiceModal()">
+        Vazgeç
+      </button>
+    </div>
+  </div>
+
+  <!-- Manual Add Student Modal (Teacher) -->
+  <div class="modal-overlay" id="addStudentModal" onclick="closeAddModalOnBackdrop(event)">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeAddModal()">&times;</button>
+      <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">Manuel Öğrenci Ekle</h3>
+      
+      <div class="form-group">
+        <label class="form-label">Öğrenci Adı Soyadı</label>
+        <input type="text" id="manualStudentName" class="form-input" placeholder="">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Dersler</label>
+        <div class="subject-grid">
+          <div class="subject-checkbox-item">
+            <input type="checkbox" id="m_sub_mat" value="Matematik" class="subject-checkbox-input m-subject">
+            <label for="m_sub_mat" class="subject-checkbox-label">
+              <span class="icon">📐</span>
+              <span class="text">Matematik</span>
+            </label>
+          </div>
+          <div class="subject-checkbox-item">
+            <input type="checkbox" id="m_sub_fiz" value="Fizik" class="subject-checkbox-input m-subject">
+            <label for="m_sub_fiz" class="subject-checkbox-label">
+              <span class="icon">⚡</span>
+              <span class="text">Fizik</span>
+            </label>
+          </div>
+          <div class="subject-checkbox-item">
+            <input type="checkbox" id="m_sub_kim" value="Kimya" class="subject-checkbox-input m-subject">
+            <label for="m_sub_kim" class="subject-checkbox-label">
+              <span class="icon">🧪</span>
+              <span class="text">Kimya</span>
+            </label>
+          </div>
+          <div class="subject-checkbox-item">
+            <input type="checkbox" id="m_sub_biyo" value="Biyoloji" class="subject-checkbox-input m-subject">
+            <label for="m_sub_biyo" class="subject-checkbox-label">
+              <span class="icon">🧬</span>
+              <span class="text">Biyoloji</span>
+            </label>
+          </div>
+          <div class="subject-checkbox-item">
+            <input type="checkbox" id="m_sub_turk" value="Türkçe" class="subject-checkbox-input m-subject">
+            <label for="m_sub_turk" class="subject-checkbox-label">
+              <span class="icon">📖</span>
+              <span class="text">Türkçe</span>
+            </label>
+          </div>
+          <div class="subject-checkbox-item">
+            <input type="checkbox" id="m_sub_cog" value="Coğrafya" class="subject-checkbox-input m-subject">
+            <label for="m_sub_cog" class="subject-checkbox-label">
+              <span class="icon">🌍</span>
+              <span class="text">Coğrafya</span>
+            </label>
+          </div>
+          <div class="subject-checkbox-item">
+            <input type="checkbox" id="m_sub_geo" value="Geometri" class="subject-checkbox-input m-subject">
+            <label for="m_sub_geo" class="subject-checkbox-label">
+              <span class="icon">📏</span>
+              <span class="text">Geometri</span>
+            </label>
+          </div>
+          <div class="subject-checkbox-item">
+            <input type="checkbox" id="m_sub_tar" value="Tarih" class="subject-checkbox-input m-subject">
+            <label for="m_sub_tar" class="subject-checkbox-label">
+              <span class="icon">🏛️</span>
+              <span class="text">Tarih</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-submit-student" onclick="submitManualStudent()">
+        <span>Listeye Ekle</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Developer About Modal -->
+  <div class="modal-overlay" id="devModal" onclick="closeDevModalOnBackdrop(event)">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeDevModal()">&times;</button>
+      <div class="dev-modal-content">
+        <div class="dev-modal-avatar">MEA</div>
+        <h3 class="dev-modal-name">Muhammed Eyyüb Ataş</h3>
+        <div class="dev-modal-role">Yazılım Geliştirici & Sistem Tasarımı</div>
+        <p class="dev-modal-bio">
+          Soru Çözümü Takip Sistemi; öğretmenler ve öğrenciler için ders bazlı soru çözüm sıralarını koordine etmek, adil bir kuyruk düzeni sağlamak ve WhatsApp entegrasyonu ile anlık katılım sunmak amacıyla geliştirilmiştir.
+        </p>
+
+        <div class="dev-contact-box">
+          <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+            <span style="font-size: 18px;">📧</span>
+            <span class="dev-contact-email">muhammedeyyubatas@gmail.com</span>
+          </div>
+          <button class="btn-dev-copy" onclick="copyEmail()">Kopyala</button>
+        </div>
+
+        <div class="dev-contact-box" style="margin-top: 10px;">
+          <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+            <span style="font-size: 18px;">📞</span>
+            <a href="tel:05344163975" onclick="handleDialPhone('05344163975'); return false;" style="color: var(--text-main); font-weight: 700; text-decoration: none; font-size: 14px;">0534 416 39 75</a>
+          </div>
+          <button class="btn-dev-phone" onclick="handleDialPhone('05344163975')">📞 Ara</button>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px;">
+          <button class="btn-dev-call" onclick="handleDialPhone('05344163975')">
+            📞 05344163975 Ara
+          </button>
+          <a href="mailto:muhammedeyyubatas@gmail.com?subject=Soru%20Çözümü%20Takip%20Sistemi%20İletişim" class="btn-dev-email">
+            ✉️ E-posta Gönder
+          </a>
+          <button class="btn-dev-copy" onclick="closeDevModal()">
+            Kapat
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-container" id="toast">
+    <span id="toastIcon">ℹ️</span>
+    <span id="toastMessage">Bildirim mesajı</span>
+  </div>
+
+  <script>
+    // ==============================================================
+    // CONFIGURATION & CLOUD SYNC
+    // ==============================================================
+    const STORAGE_KEY = 'soru_cozum_takip_students';
+    const SESSION_STORAGE_KEY = 'soru_cozum_active_session_id';
+    const STUDENT_SUBMITTED_PREFIX = 'soru_cozum_submitted_';
+    const STUDENT_SUBMITTED_KEY = 'soru_cozum_student_submitted_data';
+    const CUSTOM_URL_KEY = 'soru_cozum_custom_form_url';
+    const DEFAULT_LIVE_URL = 'https://summer-tailor-ngxxy.ship.place/?rol=ogrenci';
+    const CLOUD_SYNC_URL = 'https://kvdb.io/Go4ht8DKyJnB2erpugKxDG/soru_cozum_students';
+
+    function getActiveSessionId() {
+      let sid = localStorage.getItem(SESSION_STORAGE_KEY);
+      if (!sid) {
+        sid = 'oturum_' + Date.now();
+        localStorage.setItem(SESSION_STORAGE_KEY, sid);
+      }
+      return sid;
+    }
+
+    function startNewSession(clearQueue = true) {
+      const newSid = 'oturum_' + Date.now();
+      localStorage.setItem(SESSION_STORAGE_KEY, newSid);
+      if (clearQueue) {
+        saveStudents([]);
+      }
+      renderTeacherPanel();
+      return newSid;
+    }
+
+    function confirmStartNewSession() {
+      if (confirm('Yeni bir soru çözümü haftası başlatılsın mı?\n\n• Mevcut liste sıfırlanacaktır.\n• Tüm öğrencilere yeni link üzerinden 1 yeni başvuru hakkı verilecektir.')) {
+        startNewSession(true);
+        showToast('Yeni hafta oturumu başlatıldı!', '✨');
+      }
+    }
+
+    // "Tümü" + 8 Subjects
+    const ALL_KEY = 'Tümü';
+    const SUBJECTS = [
+      'Matematik',
+      'Fizik',
+      'Kimya',
+      'Biyoloji',
+      'Türkçe',
+      'Coğrafya',
+      'Geometri',
+      'Tarih'
+    ];
+
+    const SUBJECT_ICONS = {
+      'Tümü': '📋',
+      'Matematik': '📐',
+      'Fizik': '⚡',
+      'Kimya': '🧪',
+      'Biyoloji': '🧬',
+      'Türkçe': '📖',
+      'Coğrafya': '🌍',
+      'Geometri': '📏',
+      'Tarih': '🏛️'
+    };
+
+    // Active tab in teacher view (Defaults to 'Tümü' as requested)
+    let currentSubject = 'Tümü';
+    let showSolved = false;
+    let isSyncing = false;
+    let searchQuery = '';
+
+    // Initial dummy data with subject-level solvedSubjects
+    const DEFAULT_STUDENTS = [
+      { 
+        id: 'std_1', 
+        name: 'Ahmet Yılmaz', 
+        subjects: ['Matematik', 'Fizik'], 
+        solvedSubjects: [], 
+        createdAt: Date.now() - 35 * 60 * 1000 
+      },
+      { 
+        id: 'std_2', 
+        name: 'Zeynep Kaya', 
+        subjects: ['Geometri', 'Tarih', 'Matematik'], 
+        solvedSubjects: [], 
+        createdAt: Date.now() - 22 * 60 * 1000 
+      },
+      { 
+        id: 'std_3', 
+        name: 'Mehmet Demir', 
+        subjects: ['Kimya', 'Biyoloji', 'Fizik'], 
+        solvedSubjects: [], 
+        createdAt: Date.now() - 12 * 60 * 1000 
+      },
+      { 
+        id: 'std_4', 
+        name: 'Elif Çelik', 
+        subjects: ['Türkçe', 'Coğrafya'], 
+        solvedSubjects: [], 
+        createdAt: Date.now() - 4 * 60 * 1000 
+      }
+    ];
+
+    function getStudents() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_STUDENTS));
+          return DEFAULT_STUDENTS;
+        }
+        let list = JSON.parse(stored) || [];
+        // Migration safeguard: Ensure each student has solvedSubjects array
+        list.forEach(s => {
+          if (!Array.isArray(s.solvedSubjects)) {
+            s.solvedSubjects = s.solved ? [...(s.subjects || [])] : [];
+          }
+        });
+        return list;
+      } catch (e) {
+        return DEFAULT_STUDENTS;
+      }
+    }
+
+    let isSavingToCloud = false;
+    let lastLocalEditTime = 0;
+    let isTeacherManualMode = false;
+
+    function saveStudentsLocally(list) {
+      lastLocalEditTime = Date.now();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      window.dispatchEvent(new Event('storage'));
+      renderTeacherPanel();
+    }
+
+    async function saveStudents(list) {
+      saveStudentsLocally(list);
+      isSavingToCloud = true;
+      try {
+        await fetch(CLOUD_SYNC_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(list)
+        });
+      } catch (e) {
+        console.warn('Bulut senkronizasyon hatası:', e);
+      } finally {
+        isSavingToCloud = false;
+      }
+    }
+
+    async function syncWithCloud(isManual = false) {
+      // Do not overwrite local modifications if user recently acted (< 8 seconds) or currently saving
+      if (!isManual && (isSavingToCloud || (Date.now() - lastLocalEditTime < 8000))) {
+        return;
+      }
+      if (isSyncing) return;
+      isSyncing = true;
+      try {
+        const res = await fetch(CLOUD_SYNC_URL + '?t=' + Date.now());
+        if (res.ok) {
+          const remoteList = await res.json();
+          if (Array.isArray(remoteList)) {
+            // Guard again in case a local edit occurred while fetch was in flight
+            if (!isManual && (isSavingToCloud || (Date.now() - lastLocalEditTime < 8000))) {
+              return;
+            }
+            const localStr = localStorage.getItem(STORAGE_KEY) || '[]';
+            const remoteStr = JSON.stringify(remoteList);
+            if (localStr !== remoteStr) {
+              localStorage.setItem(STORAGE_KEY, remoteStr);
+              renderTeacherPanel();
+              if (isManual) showToast('Bulut verileri güncellendi!', '✅');
+            } else if (isManual) {
+              showToast('Veriler zaten güncel.', 'ℹ️');
+            }
+          }
+        }
+      } catch (e) {
+        if (isManual) showToast('Buluta bağlanılamadı, yerel veriler kullanılıyor.', '⚠️');
+      } finally {
+        isSyncing = false;
+      }
+    }
+
+    // Background polling every 3.5 seconds
+    setInterval(() => {
+      syncWithCloud(false);
+    }, 3500);
+
+    // ==============================================================
+    // 1. ROL AYRIMI (TEK URL) & TEK BAŞVURU KONTROLÜ
+    // ==============================================================
+    function checkRoleAndRoute() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
+      const roleParam = urlParams.get('rol') || hashParams.get('rol');
+      const sessionParam = urlParams.get('oturum') || hashParams.get('oturum') || getActiveSessionId();
+
+      const teacherView = document.getElementById('teacherView');
+      const studentView = document.getElementById('studentView');
+      const pillTeacher = document.getElementById('pillTeacher');
+      const pillStudent = document.getElementById('pillStudent');
+      const roleSwitcherBar = document.querySelector('.role-switcher-bar');
+      const formHeaderBadge = document.getElementById('formHeaderBadge');
+      const formTitle = document.getElementById('formTitle');
+      const formSubtitle = document.getElementById('formSubtitle');
+      const btnSubmit = document.getElementById('btnSubmit');
+      const btnReturnTeacher = document.getElementById('btnReturnTeacher');
+      const studentFormBox = document.getElementById('studentFormBox');
+      const studentSuccessBox = document.getElementById('studentSuccessBox');
+
+      if (roleParam === 'ogrenci') {
+        // Öğrenci Modu (Paylaşılan WhatsApp Linki): Üst çubuğu gizle ve tek hak kuralını uygula!
+        isTeacherManualMode = false;
+        if (roleSwitcherBar) roleSwitcherBar.style.display = 'none';
+        teacherView.style.display = 'none';
+        studentView.style.display = 'block';
+
+        if (formHeaderBadge) formHeaderBadge.innerHTML = '<span>✨ Öğrenci Başvuru Formu</span>';
+        if (formTitle) formTitle.textContent = 'Soru Çözümü Sırası Al';
+        if (formSubtitle) formSubtitle.textContent = 'Lütfen adınızı ve çözdürmek istediğiniz dersleri seçerek sıraya girin. (Her öğrencinin 1 kez başvuru hakkı vardır)';
+        if (btnSubmit) btnSubmit.innerHTML = '<span>🚀 Kaydet ve Sıraya Gir</span>';
+        if (btnReturnTeacher) btnReturnTeacher.style.display = 'none';
+
+        // Bu haftalık oturum/link için öğrenci daha önce form doldurmuş mu kontrol et!
+        checkStudentExistingSubmission(sessionParam);
+      } else if (roleParam === 'ogrenci_ekle') {
+        // Öğretmen Manuel Öğrenci Ekle Modu: Üst çubuğu göster, sınırsız ekleme hakkı tanı!
+        isTeacherManualMode = true;
+        if (roleSwitcherBar) roleSwitcherBar.style.display = 'flex';
+        teacherView.style.display = 'none';
+        studentView.style.display = 'block';
+
+        if (pillTeacher) pillTeacher.classList.remove('active');
+        if (pillStudent) pillStudent.classList.add('active');
+
+        if (formHeaderBadge) formHeaderBadge.innerHTML = '<span>➕ Manuel Öğrenci Ekle (Öğretmen)</span>';
+        if (formTitle) formTitle.textContent = 'Öğrenci Soru Sırası Ekle';
+        if (formSubtitle) formSubtitle.textContent = 'Öğrencinin adını ve çözdürmek istediği dersleri seçerek sıraya ekleyin. (Öğretmen olarak dilediğiniz kadar öğrenci ekleyebilirsiniz)';
+        if (btnSubmit) btnSubmit.innerHTML = '<span>➕ Öğrenciyi Sıraya Ekle</span>';
+        if (btnReturnTeacher) btnReturnTeacher.style.display = 'inline-flex';
+
+        // Öğretmen için form daima açık ve sınırsız
+        if (studentFormBox) studentFormBox.style.display = 'block';
+        if (studentSuccessBox) studentSuccessBox.style.display = 'none';
+        const formEl = document.getElementById('studentApplicationForm');
+        if (formEl) formEl.reset();
+      } else {
+        // Öğretmen Modu: Üst yönetim çubuğunu göster
+        isTeacherManualMode = false;
+        if (roleSwitcherBar) roleSwitcherBar.style.display = 'flex';
+        studentView.style.display = 'none';
+        teacherView.style.display = 'block';
+        if (pillTeacher) pillTeacher.classList.add('active');
+        if (pillStudent) pillStudent.classList.remove('active');
+        renderTeacherPanel();
+      }
+    }
+
+    function checkStudentExistingSubmission(sessionParam) {
+      const studentFormBox = document.getElementById('studentFormBox');
+      const studentSuccessBox = document.getElementById('studentSuccessBox');
+      
+      const currentSessionId = sessionParam || getActiveSessionId();
+      const sessionKey = STUDENT_SUBMITTED_PREFIX + currentSessionId;
+      const submittedRaw = localStorage.getItem(sessionKey);
+
+      if (submittedRaw) {
+        try {
+          const submittedData = JSON.parse(submittedRaw);
+          if (submittedData && submittedData.name) {
+            studentFormBox.style.display = 'none';
+            document.getElementById('userSuccessName').textContent = submittedData.name;
+            document.getElementById('userQueueSubjects').textContent = `Seçtiğiniz Dersler: ${(submittedData.subjects || []).join(', ')}`;
+            studentSuccessBox.style.display = 'block';
+            return;
+          }
+        } catch (_) {}
+      }
+
+      // Bu link için henüz form doldurulmamış: Formu temiz ve aktif aç
+      studentFormBox.style.display = 'block';
+      studentSuccessBox.style.display = 'none';
+      const formEl = document.getElementById('studentApplicationForm');
+      if (formEl) formEl.reset();
+    }
+
+    function switchRole(role) {
+      const currentUrl = new URL(window.location.href);
+      if (role === 'ogrenci') {
+        currentUrl.searchParams.set('rol', 'ogrenci');
+        currentUrl.hash = 'rol=ogrenci';
+      } else if (role === 'ogrenci_ekle') {
+        currentUrl.searchParams.set('rol', 'ogrenci_ekle');
+        currentUrl.hash = 'rol=ogrenci_ekle';
+      } else {
+        currentUrl.searchParams.delete('rol');
+        currentUrl.hash = '';
+      }
+      window.history.pushState({}, '', currentUrl.toString());
+      checkRoleAndRoute();
+      if (role === 'ogrenci_ekle') {
+        showToast('Öğrenci ekleme formuna geçildi', '➕');
+      } else if (role === 'ogretmen') {
+        showToast('Öğretmen paneline dönüldü', '👨‍🏫');
+      } else {
+        showToast('Öğrenci formuna geçildi', '🔄');
+      }
+    }
+
+    function handleDialPhone(phone) {
+      try {
+        if (window.AndroidBridge && window.AndroidBridge.dialPhone) {
+          window.AndroidBridge.dialPhone(phone);
+          return;
+        }
+      } catch (_) {}
+      window.location.href = 'tel:' + phone;
+    }
+
+    // ==============================================================
+    // 2. WHATSAPP PAYLAŞ & FORM LİNKİ YÖNETİMİ
+    // ==============================================================
+    function getStudentFormShareUrl(overrideSessionId) {
+      const sessionId = overrideSessionId || getActiveSessionId();
+      let base = DEFAULT_LIVE_URL;
+
+      const customUrl = localStorage.getItem(CUSTOM_URL_KEY);
+      if (customUrl && customUrl.trim().startsWith('http')) {
+        base = customUrl.trim();
+      } else if (window.location.origin && window.location.origin.startsWith('http') && !window.location.origin.includes('localhost')) {
+        base = `${window.location.origin}${window.location.pathname}`;
+      }
+
+      try {
+        const urlObj = new URL(base);
+        urlObj.searchParams.set('rol', 'ogrenci');
+        urlObj.searchParams.set('oturum', sessionId);
+        urlObj.hash = `rol=ogrenci&oturum=${sessionId}`;
+        return urlObj.toString();
+      } catch (_) {
+        const clean = base.split('?')[0].split('#')[0];
+        return `${clean}?rol=ogrenci&oturum=${sessionId}`;
+      }
+    }
+
+    function shareStudentForm() {
+      const students = getStudents();
+      // Eğer mevcut listede öğrenciler varsa öğretmene yeni hafta mı mevcut hafta mı sor
+      if (students.length > 0) {
+        openShareChoiceModal();
+      } else {
+        // Liste zaten boşsa direkt yeni oturum linki üret ve paylaş
+        executeShareWithNewSession();
+      }
+    }
+
+    function openShareChoiceModal() {
+      const modal = document.getElementById('shareChoiceModal');
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeShareChoiceModal() {
+      const modal = document.getElementById('shareChoiceModal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function closeShareChoiceModalOnBackdrop(e) {
+      if (e.target.id === 'shareChoiceModal') {
+        closeShareChoiceModal();
+      }
+    }
+
+    async function executeShareWithNewSession() {
+      closeShareChoiceModal();
+      const newSessionId = startNewSession(true);
+      showToast('Yeni hafta oturumu başlatıldı, WhatsApp açılıyor...', '✨');
+      await doShareUrl(getStudentFormShareUrl(newSessionId));
+    }
+
+    async function executeShareCurrentSession() {
+      closeShareChoiceModal();
+      const currentSessionId = getActiveSessionId();
+      await doShareUrl(getStudentFormShareUrl(currentSessionId));
+    }
+
+    async function doShareUrl(studentUrl) {
+      const shareText = `Bu haftaki soru çözümü sırası için formu doldurunuz: ${studentUrl}`;
+
+      // Native Android WhatsApp bridge if available
+      if (window.AndroidBridge && typeof window.AndroidBridge.shareWhatsApp === 'function') {
+        window.AndroidBridge.shareWhatsApp(shareText);
+        showToast('WhatsApp paylaşım menüsü açılıyor...', '📱');
+        return;
+      }
+
+      // Web Share API
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'Soru Çözümü Sırası Başvuru Formu',
+            text: `Bu haftaki soru çözümü sırası için formu doldurunuz:`,
+            url: studentUrl
+          });
+          showToast('Form bağlantısı paylaşıldı!', '✅');
+          return;
+        } catch (err) {
+          if (err.name === 'AbortError') return;
+        }
+      }
+
+      // Fallback: Direct WhatsApp send
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareText).catch(() => {});
+      }
+
+      showToast('WhatsApp açılıyor...', '💬');
+      window.open(whatsappUrl, '_blank');
+    }
+
+    // ==============================================================
+    // 3. ÖĞRETMEN YÖNETİM PANELİ (TÜMÜ + DERS SEKMELERİ & ÇÖZÜLDÜ)
+    // ==============================================================
+    function renderTeacherPanel() {
+      const students = getStudents();
+
+      // Bekleyen öğrenci sayısı: Henüz çözülmemiş en az bir dersi olan öğrenciler (sırada bekleyenler)
+      const waitingStudentsCount = students.filter(s => {
+        const subs = s.subjects || [];
+        return subs.length > 0 && subs.some(sub => !(s.solvedSubjects || []).includes(sub));
+      }).length;
+
+      // Çözdüren öğrenci sayısı: Soru çözümü tamamlanan öğrenciler (tüm dersleri çözülenler)
+      const solvedStudentsCount = students.filter(s => {
+        const subs = s.subjects || [];
+        return subs.length > 0 && subs.every(sub => (s.solvedSubjects || []).includes(sub));
+      }).length;
+
+      document.getElementById('statWaiting').textContent = waitingStudentsCount;
+      document.getElementById('statCompleted').textContent = solvedStudentsCount;
+      document.getElementById('statTotal').textContent = students.length;
+
+      renderSubjectTabs(students);
+      renderSubjectQueueList(students);
+    }
+
+    // Render "TÜMÜ" + 8 Subjects in tabs
+    function renderSubjectTabs(students) {
+      const container = document.getElementById('filterContainer');
+      container.innerHTML = '';
+
+      // 1. "TÜMÜ" TAB
+      const isAllActive = currentSubject === ALL_KEY;
+      // Waiting students count in "Tümü": Students with at least 1 unresolved subject
+      const waitingAllCount = students.filter(s => 
+        (s.subjects || []).some(sub => !(s.solvedSubjects || []).includes(sub))
+      ).length;
+
+      const allBtn = document.createElement('button');
+      allBtn.className = `filter-btn ${isAllActive ? 'active' : ''}`;
+      allBtn.onclick = () => selectSubjectTab(ALL_KEY);
+      allBtn.innerHTML = `<span>📋 Tümü</span> <span class="filter-count">${waitingAllCount}</span>`;
+      container.appendChild(allBtn);
+
+      // 2. 8 SUBJECT TABS
+      SUBJECTS.forEach(sub => {
+        const isActive = currentSubject === sub;
+        const waitingCount = students.filter(s => 
+          s.subjects && 
+          s.subjects.includes(sub) && 
+          !(s.solvedSubjects && s.solvedSubjects.includes(sub))
+        ).length;
+
+        const btn = document.createElement('button');
+        btn.className = `filter-btn ${isActive ? 'active' : ''}`;
+        btn.onclick = () => selectSubjectTab(sub);
+
+        const icon = SUBJECT_ICONS[sub] || '📚';
+        btn.innerHTML = `<span>${icon} ${sub}</span> <span class="filter-count">${waitingCount}</span>`;
+        container.appendChild(btn);
+      });
+    }
+
+    function selectSubjectTab(subject) {
+      currentSubject = subject;
+      renderTeacherPanel();
+    }
+
+    function toggleShowSolved() {
+      showSolved = !showSolved;
+      const icon = document.getElementById('toggleSolvedIcon');
+      const text = document.getElementById('toggleSolvedText');
+      if (showSolved) {
+        icon.textContent = '📦';
+        text.textContent = 'Sadece Bekleyenler';
+      } else {
+        icon.textContent = '👁️';
+        text.textContent = 'Çözülenleri Göster';
+      }
+      renderTeacherPanel();
+    }
+
+    function renderSubjectQueueList(allStudents) {
+      const queueList = document.getElementById('queueList');
+      const iconHolder = document.getElementById('subjectIconHolder');
+      const titleHolder = document.getElementById('subjectTitleHolder');
+
+      iconHolder.textContent = SUBJECT_ICONS[currentSubject] || '📋';
+
+      let filtered = [];
+
+      if (currentSubject === ALL_KEY) {
+        // "TÜMÜ" TAB LOGIC:
+        // Show all students. If showSolved is FALSE, show students who have at least ONE pending subject.
+        // If showSolved is TRUE, show students whose all subjects have been solved.
+        filtered = allStudents.filter(s => {
+          const subjects = s.subjects || [];
+          if (subjects.length === 0) return false;
+          const isAllSolved = subjects.every(sub => (s.solvedSubjects || []).includes(sub));
+          return showSolved ? isAllSolved : !isAllSolved;
+        });
+
+        titleHolder.textContent = showSolved 
+          ? `Tüm Öğrenciler - Tamamlananlar (${filtered.length} Kayıt)`
+          : `Tüm Öğrenciler - Soru Bekleyenler (${filtered.length} Öğrenci)`;
+      } else {
+        // INDIVIDUAL SUBJECT TAB LOGIC:
+        filtered = allStudents.filter(s => {
+          if (!s.subjects || !s.subjects.includes(currentSubject)) return false;
+          const isSolvedInThisSubject = s.solvedSubjects && s.solvedSubjects.includes(currentSubject);
+          return showSolved ? isSolvedInThisSubject : !isSolvedInThisSubject;
+        });
+
+        titleHolder.textContent = showSolved 
+          ? `${currentSubject} - Çözülen Sorular (${filtered.length} Kayıt)` 
+          : `${currentSubject} Soru Sırası (${filtered.length} Öğrenci Bekliyor)`;
+      }
+
+      // Filter by search query if user entered a name
+      if (searchQuery) {
+        const qNorm = normalizeTurkish(searchQuery.toLowerCase());
+        filtered = filtered.filter(s => {
+          const nameNorm = normalizeTurkish((s.name || '').toLowerCase());
+          return nameNorm.includes(qNorm);
+        });
+        titleHolder.textContent = `Arama: "${searchQuery}" (${filtered.length} Öğrenci Bulundu)`;
+      }
+
+      // Sort by creation time (FIFO)
+      filtered.sort((a, b) => a.createdAt - b.createdAt);
+
+      if (filtered.length === 0) {
+        if (searchQuery) {
+          queueList.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">🔍</div>
+              <div class="empty-title">"${escapeHtml(searchQuery)}" ile eşleşen öğrenci bulunamadı</div>
+              <div class="empty-desc">
+                Aradığınız isimde bir öğrenci kaydı bulunmuyor. Farklı bir isim yazabilir veya aramayı temizleyebilirsiniz.
+              </div>
+              <button class="filter-btn" style="margin: 14px auto 0 auto; display: inline-flex; background: #e0e7ff; color: var(--primary);" onclick="clearSearch()">
+                ✕ Aramayı Temizle
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        queueList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">${showSolved ? '🎉' : '☕'}</div>
+            <div class="empty-title">${showSolved ? 'Çözülmüş kayıt bulunmuyor' : 'Bekleyen öğrenci bulunmuyor!'}</div>
+            <div class="empty-desc">
+              ${showSolved 
+                ? 'Çözülen soru ve öğrenciler burada listelenir.' 
+                : (currentSubject === ALL_KEY ? 'Öğrenciler başvuru yaptıkça bu genel listede sırayla belirecektir.' : currentSubject + ' dersi için bekleyen öğrenci kalmadı.')}
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      queueList.innerHTML = filtered.map((student, idx) => {
+        const timeAgo = formatTimeAgo(student.createdAt);
+        const allSubjects = student.subjects || [];
+        const solvedSubjects = student.solvedSubjects || [];
+        const isEverySubjectSolved = allSubjects.length > 0 && allSubjects.every(sub => solvedSubjects.includes(sub));
+
+        // RENDER CLICKABLE SUBJECT TAGS
+        const subjectTagsHtml = allSubjects.map(sub => {
+          const isTargetInSingleTab = (currentSubject !== ALL_KEY && sub === currentSubject);
+          const isThisSubSolved = solvedSubjects.includes(sub);
+          const cls = `tag-${turkishToAscii(sub.toLowerCase())}`;
+          const targetCls = isTargetInSingleTab ? 'current-target' : '';
+          const solvedCls = isThisSubSolved ? 'solved-tag' : '';
+
+          const statusText = isThisSubSolved ? 'çözüldü' : 'bekliyor';
+
+          return `
+            <span 
+              class="subject-tag ${cls} ${targetCls} ${solvedCls}" 
+              onclick="openSubjectActionModal('${student.id}', '${sub}')"
+              title="Tıklayınız: ${sub} dersi çözüm durumunu değiştirin"
+            >
+              <span>${SUBJECT_ICONS[sub] || ''}</span>
+              <span>${sub}</span>
+              <span class="subject-tag-status-indicator">(${statusText})</span>
+            </span>
+          `;
+        }).join('');
+
+        // Action Buttons on Right
+        let rightSideHtml = '';
+        if (currentSubject === ALL_KEY) {
+          if (isEverySubjectSolved) {
+            rightSideHtml = `<span class="all-done-badge">✓ Tamamlandı</span>`;
+          } else {
+            // Per user request: Remove "X ders bekliyor" text/button next to student lessons
+            rightSideHtml = '';
+          }
+        } else {
+          // Specific Subject View: Quick button for the current active subject
+          const isCurrentlySolved = solvedSubjects.includes(currentSubject);
+          rightSideHtml = isCurrentlySolved 
+            ? `<button class="btn-undo" onclick="markSubjectUnsolved('${student.id}', '${currentSubject}')">↩ Geri Al</button>`
+            : `<button class="btn-solve-subject" onclick="markSubjectSolved('${student.id}', '${currentSubject}')">✓ ${currentSubject} Çözüldü</button>`;
+        }
+
+        return `
+          <div class="student-card ${isEverySubjectSolved ? 'all-solved-card' : ''}" id="card-${student.id}">
+            <div class="student-left">
+              <div class="queue-badge ${isEverySubjectSolved ? 'done' : ''}">
+                ${isEverySubjectSolved ? '✓' : `#${idx + 1}`}
+              </div>
+              <div class="student-details">
+                <div class="student-name-row">
+                  <span class="student-name">${escapeHtml(student.name)}</span>
+                  <span class="student-time">• ${timeAgo}</span>
+                </div>
+                <div class="subject-tags">
+                  ${subjectTagsHtml}
+                </div>
+              </div>
+            </div>
+            <div class="student-right">
+              ${rightSideHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ==============================================================
+    // 4. İNTERAKTİF DERS ÇÖZÜLDÜ MENÜSÜ (SUBJECT ACTION MODAL)
+    // ==============================================================
+    let activeModalStudentId = null;
+    let activeModalSubject = null;
+
+    function openSubjectActionModal(studentId, subject) {
+      const students = getStudents();
+      const student = students.find(s => s.id === studentId);
+      if (!student) return;
+
+      activeModalStudentId = studentId;
+      activeModalSubject = subject;
+
+      const solvedSubs = student.solvedSubjects || [];
+      const isSolved = solvedSubs.includes(subject);
+      const icon = SUBJECT_ICONS[subject] || '📚';
+      const colorCls = `tag-${turkishToAscii(subject.toLowerCase())}`;
+
+      const modalContainer = document.getElementById('subjectModalContent');
+      modalContainer.innerHTML = `
+        <div class="sub-action-icon">${icon}</div>
+        <div class="sub-action-student">Öğrenci:</div>
+        <div class="sub-action-name">${escapeHtml(student.name)}</div>
+        
+        <div>
+          <span class="sub-action-subject-pill ${colorCls}">
+            <span>${icon}</span>
+            <span>${subject} Dersi</span>
+          </span>
+        </div>
+
+        <div class="sub-action-status-card ${isSolved ? 'solved' : 'pending'}">
+          <span>${isSolved ? '✅ Bu ders çözüldü olarak işaretlenmiş.' : '⏳ Bu ders için soru çözümü bekleniyor.'}</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          ${!isSolved ? `
+            <button class="btn-solve-modal-primary" onclick="confirmSubjectSolve(true)">
+              <span>✓ ${subject} Çözüldü Olarak İşaretle</span>
+            </button>
+          ` : `
+            <button class="btn-unsolve-modal-secondary" onclick="confirmSubjectSolve(false)">
+              <span>↩️ Çözümü Geri Al (Beklemeye Al)</span>
+            </button>
+          `}
+          <button class="btn-undo" style="padding: 12px; font-weight: 700;" onclick="closeSubjectModal()">
+            Kapat
+          </button>
+        </div>
+      `;
+
+      document.getElementById('subjectActionModal').classList.add('active');
+    }
+
+    function closeSubjectModal() {
+      document.getElementById('subjectActionModal').classList.remove('active');
+      activeModalStudentId = null;
+      activeModalSubject = null;
+    }
+
+    function closeSubjectModalOnBackdrop(e) {
+      if (e.target.id === 'subjectActionModal') {
+        closeSubjectModal();
+      }
+    }
+
+    function confirmSubjectSolve(markSolved) {
+      if (!activeModalStudentId || !activeModalSubject) return;
+      const sId = activeModalStudentId;
+      const sub = activeModalSubject;
+      closeSubjectModal();
+
+      if (markSolved) {
+        markSubjectSolved(sId, sub);
+      } else {
+        markSubjectUnsolved(sId, sub);
+      }
+    }
+
+    // MARK ONLY THIS SPECIFIC SUBJECT AS SOLVED
+    function markSubjectSolved(studentId, subject) {
+      lastLocalEditTime = Date.now();
+      const students = getStudents();
+      const student = students.find(s => s.id === studentId);
+      if (student) {
+        if (!Array.isArray(student.solvedSubjects)) {
+          student.solvedSubjects = [];
+        }
+        if (!student.solvedSubjects.includes(subject)) {
+          student.solvedSubjects.push(subject);
+        }
+
+        const allSolved = (student.subjects || []).every(sub => student.solvedSubjects.includes(sub));
+        student.solved = allSolved;
+
+        saveStudents(students);
+        showToast(`${student.name} için ${subject} çözüldü!`, '🎉');
+      }
+    }
+
+    // UNDO: RETURN THIS SPECIFIC SUBJECT BACK TO QUEUE
+    function markSubjectUnsolved(studentId, subject) {
+      lastLocalEditTime = Date.now();
+      const students = getStudents();
+      const student = students.find(s => s.id === studentId);
+      if (student && Array.isArray(student.solvedSubjects)) {
+        student.solvedSubjects = student.solvedSubjects.filter(sub => sub !== subject);
+        student.solved = false;
+        saveStudents(students);
+        showToast(`${student.name} - ${subject} tekrar sıraya alındı`, '↩️');
+      }
+    }
+
+    function resetQueueConfirm() {
+      if (confirm('Tüm soru sırasını ve başvuruları temizlemek istediğinize emin misiniz?')) {
+        lastLocalEditTime = Date.now();
+        saveStudents([]);
+        showToast('Soru sırası temizlendi', '🗑️');
+      }
+    }
+
+    // ==============================================================
+    // 5. ÖĞRENCİ BAŞVURU FORMU LOGIC (REALTIME CLOUD & TEK HAK KONTROLÜ)
+    // ==============================================================
+    async function handleStudentSubmit(e) {
+      e.preventDefault();
+      const nameInput = document.getElementById('studentNameInput');
+      const submitBtn = document.getElementById('btnSubmit');
+      const name = nameInput.value.trim();
+
+      const selectedBoxes = Array.from(document.querySelectorAll('input[name="ders"]:checked'));
+      const selectedSubjects = selectedBoxes.map(b => b.value);
+
+      if (!name) {
+        showToast('Lütfen adınızı ve soyadınızı giriniz.', '⚠️');
+        nameInput.focus();
+        return;
+      }
+
+      if (selectedSubjects.length === 0) {
+        showToast('Lütfen en az bir ders seçiniz.', '⚠️');
+        return;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
+      const sessionParam = urlParams.get('oturum') || hashParams.get('oturum') || getActiveSessionId();
+      const sessionKey = STUDENT_SUBMITTED_PREFIX + sessionParam;
+
+      // Sadece paylaşılan link üzerinden gelen öğrenciler için tek hak kuralı işletilir
+      if (!isTeacherManualMode && localStorage.getItem(sessionKey)) {
+        showToast('Bu haftaki soru çözümü için başvurunuz zaten kaydedilmiştir.', '⚠️');
+        checkStudentExistingSubmission(sessionParam);
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>⏳ Kaydediliyor...</span>';
+
+      try {
+        let currentList = [];
+        try {
+          const res = await fetch(CLOUD_SYNC_URL + '?t=' + Date.now());
+          if (res.ok) {
+            currentList = await res.json();
+            if (!Array.isArray(currentList)) currentList = [];
+          }
+        } catch (_) {
+          currentList = getStudents();
+        }
+
+        // Öğrenci linkinde aynı isimle mükerrer başvuru engellenir (öğretmen manuel modunda sınır yoktur)
+        if (!isTeacherManualMode) {
+          const existingStudent = currentList.find(s => 
+            s.name && 
+            s.name.trim().toLowerCase() === name.toLowerCase() &&
+            (s.sessionId === sessionParam || !s.sessionId)
+          );
+
+          if (existingStudent) {
+            showToast(`'${name}' adına ait başvuru bu hafta için zaten var!`, '⚠️');
+            alert(`Dikkat: '${name}' adına ait bu haftaki soru çözümü için aktif bir başvuru zaten mevcuttur.\n\nHer öğrencinin bu link için yalnızca 1 başvuru hakkı bulunmaktadır.`);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>🚀 Kaydet ve Sıraya Gir</span>';
+            return;
+          }
+        }
+
+        const newStudent = {
+          id: 'std_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+          name: name,
+          subjects: selectedSubjects,
+          solvedSubjects: [],
+          solved: false,
+          sessionId: sessionParam,
+          createdAt: Date.now()
+        };
+
+        currentList.push(newStudent);
+        await saveStudents(currentList);
+
+        if (isTeacherManualMode) {
+          // Öğretmen Modu: Formu sıfırla, ekranda kal, sınırsız eklemeye izin ver!
+          document.getElementById('studentApplicationForm').reset();
+          showToast(`'${name}' başarıyla sıraya eklendi!`, '🎉');
+          setTimeout(() => {
+            const input = document.getElementById('studentNameInput');
+            if (input) input.focus();
+          }, 150);
+        } else {
+          // Paylaşılan Link Öğrenci Modu: Tek seferlik kilit ekranını göster
+          localStorage.setItem(sessionKey, JSON.stringify({
+            id: newStudent.id,
+            name: newStudent.name,
+            subjects: newStudent.subjects,
+            sessionId: sessionParam,
+            createdAt: newStudent.createdAt
+          }));
+
+          document.getElementById('studentFormBox').style.display = 'none';
+          const successBox = document.getElementById('studentSuccessBox');
+          document.getElementById('userSuccessName').textContent = name;
+          document.getElementById('userQueueSubjects').textContent = `Seçilen Dersler: ${selectedSubjects.join(', ')}`;
+          successBox.style.display = 'block';
+
+          showToast('Sıraya başarıyla kaydoldunuz!', '🎉');
+        }
+      } catch (err) {
+        showToast('Kayıt oluşturulurken bir hata oluştu.', '❌');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = isTeacherManualMode 
+          ? '<span>➕ Öğrenciyi Sıraya Ekle</span>' 
+          : '<span>🚀 Kaydet ve Sıraya Gir</span>';
+      }
+    }
+
+    // ==============================================================
+    // 6. MANUEL ÖĞRENCİ EKLE (TEACHER MODAL)
+    // ==============================================================
+    function openAddModal() {
+      document.getElementById('addStudentModal').classList.add('active');
+      document.getElementById('manualStudentName').value = '';
+      document.querySelectorAll('.m-subject').forEach(cb => cb.checked = false);
+      if (currentSubject !== ALL_KEY) {
+        const activeCb = Array.from(document.querySelectorAll('.m-subject')).find(cb => cb.value === currentSubject);
+        if (activeCb) activeCb.checked = true;
+      }
+      setTimeout(() => document.getElementById('manualStudentName').focus(), 100);
+    }
+
+    function closeAddModal() {
+      document.getElementById('addStudentModal').classList.remove('active');
+    }
+
+    function closeAddModalOnBackdrop(e) {
+      if (e.target.id === 'addStudentModal') {
+        closeAddModal();
+      }
+    }
+
+    async function submitManualStudent() {
+      const name = document.getElementById('manualStudentName').value.trim();
+      const selectedBoxes = Array.from(document.querySelectorAll('.m-subject:checked'));
+      const selectedSubjects = selectedBoxes.map(b => b.value);
+
+      if (!name) {
+        showToast('Öğrenci adı giriniz.', '⚠️');
+        return;
+      }
+
+      if (selectedSubjects.length === 0) {
+        showToast('En az bir ders seçiniz.', '⚠️');
+        return;
+      }
+
+      const students = getStudents();
+      students.push({
+        id: 'std_' + Date.now(),
+        name: name,
+        subjects: selectedSubjects,
+        solvedSubjects: [],
+        solved: false,
+        createdAt: Date.now()
+      });
+
+      await saveStudents(students);
+      closeAddModal();
+      showToast(`${name} sıraya eklendi!`, '✅');
+    }
+
+    // ==============================================================
+    // 7. GELİŞTİRİCİ HAKKINDA MODAL
+    // ==============================================================
+    function openDevModal() {
+      document.getElementById('devModal').classList.add('active');
+    }
+
+    function closeDevModal() {
+      document.getElementById('devModal').classList.remove('active');
+    }
+
+    function closeDevModalOnBackdrop(e) {
+      if (e.target.id === 'devModal') {
+        closeDevModal();
+      }
+    }
+
+    function copyEmail() {
+      const email = 'muhammedeyyubatas@gmail.com';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).then(() => {
+          showToast('E-posta adresi panoya kopyalandı!', '📋');
+        }).catch(() => {
+          showToast(email, '📧');
+        });
+      } else {
+        showToast(email, '📧');
+      }
+    }
+
+    // ==============================================================
+    // SEARCH & UTILITIES
+    // ==============================================================
+    function handleSearch(val) {
+      searchQuery = (val || '').trim();
+      const clearBtn = document.getElementById('btnClearSearch');
+      if (clearBtn) {
+        clearBtn.style.display = searchQuery ? 'flex' : 'none';
+      }
+      renderSubjectQueueList(getStudents());
+    }
+
+    function clearSearch() {
+      const input = document.getElementById('studentSearchInput');
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      searchQuery = '';
+      const clearBtn = document.getElementById('btnClearSearch');
+      if (clearBtn) {
+        clearBtn.style.display = 'none';
+      }
+      renderSubjectQueueList(getStudents());
+    }
+
+    function normalizeTurkish(str) {
+      return (str || '')
+        .replace(/ğ/g, 'g')
+        .replace(/ü/g, 'u')
+        .replace(/ş/g, 's')
+        .replace(/ı/g, 'i')
+        .replace(/ö/g, 'o')
+        .replace(/ç/g, 'c');
+    }
+
+    function formatTimeAgo(timestamp) {
+      if (!timestamp) return 'Az önce';
+      const seconds = Math.floor((Date.now() - timestamp) / 1000);
+      if (seconds < 60) return 'Az önce';
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes} dk önce`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours} saat önce`;
+      return `${Math.floor(hours / 24)} gün önce`;
+    }
+
+    function turkishToAscii(str) {
+      const map = { 'ı': 'i', 'ğ': 'g', 'ü': 'u', 'ş': 's', 'ö': 'o', 'ç': 'c' };
+      return str.replace(/[ığüşöç]/g, match => map[match] || match);
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    let toastTimer = null;
+    function showToast(message, icon = 'ℹ️') {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastIcon').textContent = icon;
+      document.getElementById('toastMessage').textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    window.addEventListener('storage', () => {
+      renderTeacherPanel();
+    });
+
+    window.addEventListener('popstate', () => {
+      checkRoleAndRoute();
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkRoleAndRoute();
+      syncWithCloud(false);
+    });
+  </script>
+</body>
+</html>
